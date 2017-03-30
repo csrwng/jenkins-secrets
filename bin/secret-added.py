@@ -20,7 +20,7 @@ def main(argv):
 
 def processSecret(namespace, name, annotation_value=None):
     if not annotation_value:
-        print("secret %s/%s is not applicable to Jenkins" % (namespace, name))
+        print("secret {}/{} is not applicable to Jenkins".format(namespace, name))
         return
 
     core_instance = oc_common.connect_to_kube_core()
@@ -28,7 +28,7 @@ def processSecret(namespace, name, annotation_value=None):
     try:
         secret = core_instance.read_namespaced_secret(name, namespace)
     except ApiException as e:
-        print("Exception when calling CoreV1Api->read_namespaced_secret: %s\n" % e)
+        print("Exception when calling CoreV1Api->read_namespaced_secret: {}\n".format(e))
         exit(1)
 
     j = oc_common.connect_to_jenkins()
@@ -45,7 +45,7 @@ def processSecret(namespace, name, annotation_value=None):
             'password': user_pass
         }
         creds = j.credentials
-        if name in creds.keys():
+        if name in creds:
             print("replacing existing secret {}".format(name))
             del creds[name]
 
@@ -53,9 +53,9 @@ def processSecret(namespace, name, annotation_value=None):
         creds[name] = UsernamePasswordCredential(cred)
     elif secret.type == "ci.openshift.io/token" or secret.type == "ci.openshift.io/secret-text":
         token = ""
-        if "secret" in secret.data.keys():
+        if "secret" in secret.data:
             token = base64.b64decode(secret.data["secret"])
-        elif "token" in secret.data.keys():
+        elif "token" in secret.data:
             token = base64.b64decode(secret.data["token"])
 
         if secret:
@@ -65,7 +65,7 @@ def processSecret(namespace, name, annotation_value=None):
                 'secret': token
             }
             creds = j.credentials
-            if name in creds.keys():
+            if name in creds:
                 print("replacing existing secret {}".format(name))
                 del creds[name]
 
@@ -73,17 +73,17 @@ def processSecret(namespace, name, annotation_value=None):
             creds[name] = SecretTextCredential(cred)
     elif secret.type == "kubernetes.io/ssh-auth" or secret.type == "ci.openshift.io/secret-ssh":
         key = ""
-        if "private_key" in secret.data.keys():
+        if "private_key" in secret.data:
             key = base64.b64decode(secret.data["private_key"])
-        elif "ssh-privatekey" in secret.data.keys():
+        elif "ssh-privatekey" in secret.data:
             key = base64.b64decode(secret.data["ssh-privatekey"])
         
         passphrase = ""
-        if "passphrase" in secret.data.keys():
+        if "passphrase" in secret.data:
             passphrase = base64.b64decode(secret.data["passphrase"])
 
         username = ""
-        if "username" in secret.data.keys():
+        if "username" in secret.data:
             username = base64.b64decode(secret.data["username"])
 
         cred = {
@@ -94,7 +94,7 @@ def processSecret(namespace, name, annotation_value=None):
             'private_key': key,
         }
         creds = j.credentials
-        if name in creds.keys():
+        if name in creds:
             print("replacing existing secret {}".format(name))
             del creds[name]
 
