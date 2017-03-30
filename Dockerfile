@@ -15,5 +15,5 @@ COPY bin/* /usr/bin/
 ENTRYPOINT ["/usr/bin/oc", "observe", "secrets", \
                "--names=secret-names.py", \
                "--delete=secret-delete.py", \
-               "-a", "{ .metadata.annotations['ci\\.openshift\\.io/jenkins-secret-id'] }", \
+               "-a", "{ .metadata.annotations.ci\.openshift\.io/jenkins-secret-id }", \
                "--", "secret-added.py"]
