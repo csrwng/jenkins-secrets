@@ -4,9 +4,7 @@ USER root
 
 RUN yum -y install python-pip && \
     pip install kubernetes
-RUN git clone https://github.com/pycontribs/jenkinsapi.git && \
-    cd jenkinsapi && \
-    pip install .
+RUN pip install git+https://github.com/pycontribs/jenkinsapi.git
 
 ENV JENKINS_SERVICE_URL="http://jenkins"
 
