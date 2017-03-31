@@ -25,7 +25,7 @@ class OpenShiftRequester(Requester):
     def get_request_dict(self, params=None, data=None, files=None, headers=None, **kwargs):
         req_dict = super(OpenShiftRequester, self).get_request_dict(params=params, data=data, files=files, headers=headers)
         auth_header = "Bearer {}".format(self.token)
-        if 'headers' in req_dict.keys():
+        if 'headers' in req_dict:
             req_dict['headers']['Authorization'] = auth_header
         else:
             req_dict['headers'] = { "Authorization": auth_header }

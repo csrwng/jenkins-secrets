@@ -18,7 +18,7 @@ def delete_secret(namespace, name):
     j = oc_common.connect_to_jenkins()
     creds = j.credentials
     name = "_openshift/{}/{}".format(namespace, name)
-    if name in creds.keys():
+    if name in creds:
         print("deleting secret {} from Jenkins".format(name))
         del creds[name]
 
